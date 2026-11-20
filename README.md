@@ -13,6 +13,8 @@ niemify help
 
 This is a local build from the checkout, not a publication to the LuaRocks package registry. If you use a custom LuaRocks tree, add its `bin` directory to `PATH`.
 
+Use `niemify help <command>` or `niemify <command> --help` for command-specific usage and examples.
+
 ## Integration demo: warehouse → inventory catalog
 
 A fictional warehouse sends two stock counts to a catalog. The [exchange schema](examples/inventory/exchange.xsd) defines the update and imports a [shared identifier schema](examples/inventory/common.xsd) from a relative path. The shared schema requires three uppercase letters, a hyphen, and four digits for each SKU.
@@ -56,6 +58,8 @@ niemify verify exchange-roundtrip.xml
 ```
 
 `convert` infers direction from the input extension, uses UTF-8, and refuses to overwrite an existing output. Use `-` as output to write to stdout. Pass `--schema` to validate on conversion. `verify` defaults to the active schema. Commands exit nonzero on failure.
+
+File conversions report the destination and format on stderr. With `-` as the output, stdout contains only the converted data.
 
 XML becomes a JSON document tree whose `elements` arrays preserve child order. Qualified names, attributes, namespace declarations, repeated nodes, and mixed text are kept; exact XML formatting is not. XML with DTDs is rejected.
 

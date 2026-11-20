@@ -13,7 +13,26 @@ export NIEMIFY_HOME="$work/state"
 export NIEMIFY_HOME="$work/cli-state"
 
 cli() { "$lua" bin/niemify "$@"; }
-cli convert examples/exchange.xml "$work/exchange.json" --schema exchange-demo
+cli help convert >"$work/help"
+cli convert --help >"$work/flag-help"
+cmp "$work/help" "$work/flag-help"
+grep -Fq 'niemify convert exchange.xml exchange.json' "$work/help"
+if cli verify >"$work/out" 2>"$work/err"; then
+  echo 'verify accepted a missing input operand' >&2
+  exit 1
+fi
+test ! -s "$work/out"
+grep -Fq 'Usage: niemify verify <input.xml>' "$work/err"
+cli convert examples/exchange.xml "$work/exchange.json" --schema exchange-demo >"$work/out" 2>"$work/err"
+test ! -s "$work/out"
+grep -Fq "Wrote $work/exchange.json (XML to JSON)." "$work/err"
+cli convert examples/exchange.xml - --schema exchange-demo >"$work/stdout.json" 2>"$work/err"
+test ! -s "$work/err"
+"$lua" - "$work/stdout.json" <<'LUA'
+local stream <close> = assert(io.open(arg[1], 'r'))
+local data, _, err = require('dkjson').decode(stream:read('a'))
+assert(data and not err and data.elements[1].name == 'ex:Exchange')
+LUA
 cli convert "$work/exchange.json" "$work/roundtrip.xml" --schema exchange-demo
 cli verify "$work/roundtrip.xml"
 if cli convert examples/exchange.xml "$work/exchange.json" >"$work/out" 2>"$work/err"; then
@@ -21,6 +40,7 @@ if cli convert examples/exchange.xml "$work/exchange.json" >"$work/out" 2>"$work
   exit 1
 fi
 grep -q 'already exists' "$work/err"
+grep -Fq 'choose another output path, or use - for stdout' "$work/err"
 printf '<wrong/>' >"$work/wrong.xml"
 if cli convert "$work/wrong.xml" "$work/invalid.json" --schema exchange-demo >"$work/out" 2>"$work/err"; then
   echo 'convert accepted schema-invalid XML' >&2

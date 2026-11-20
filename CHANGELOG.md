@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added grouped CLI help, per-command examples, conversion receipts, and recovery hints without mixing messages into piped data.
 - Added a synthetic warehouse-to-catalog exchange demonstrating relative XSD imports, ordered JSON conversion, and rejection of an invalid SKU.
 
 ## 2.0.0
