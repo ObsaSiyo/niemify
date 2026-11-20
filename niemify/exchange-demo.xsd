@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns:ex="urn:niemify:exchange-demo"
+  targetNamespace="urn:niemify:exchange-demo" elementFormDefault="qualified">
+  <xs:element name="Exchange" type="ex:ExchangeType"/>
+  <xs:complexType name="ExchangeType">
+    <xs:sequence>
+      <xs:element name="MessageId" type="xs:string"/>
+      <xs:element name="Sender" type="xs:string"/>
+      <xs:element name="Recipient" type="xs:string"/>
+      <xs:element name="Payload" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

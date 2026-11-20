@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ex:Exchange xmlns:ex="urn:niemify:exchange-demo">
+  <ex:MessageId>DEMO-001</ex:MessageId>
+  <ex:Sender>Example Registry</ex:Sender>
+  <ex:Recipient>Example Archive</ex:Recipient>
+  <ex:Payload>Fictional training exchange.</ex:Payload>
+</ex:Exchange>

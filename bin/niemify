@@ -1,0 +1,103 @@
+#!/usr/bin/env lua
+
+local niemify = require('niemify')
+local schema = require('niemify.schema')
+local json = require('dkjson')
+local lfs = require('lfs')
+
+local help = [[Usage: niemify <command>
+
+  convert <input.xml|input.json> <output|-> [--schema <name>]
+  verify <input.xml> [--schema <name>]
+  setup                       Initialize local configuration
+  config                      Show local configuration
+  list                        List built-in and registered schemas
+  upload <name> <schema.xsd>  Register a trusted local schema
+  update <name> <schema.xsd>  Replace a schema registration
+  switch <name>               Set the active schema
+  --version                   Print the version
+  help                        Show this help]]
+
+local actions = {
+  setup = schema.setup, config = schema.config, list = schema.list,
+  upload = schema.upload, update = schema.update, switch = schema.switch,
+}
+local arity = { convert = 2, verify = 1, setup = 0, config = 0, list = 0, upload = 2, update = 2, switch = 1 }
+
+local function read(path)
+  local file <close> = assert(io.open(path, 'rb'))
+  return assert(file:read('a'))
+end
+
+local function write_new(path, data)
+  if lfs.symlinkattributes(path) then error('Output already exists: ' .. path, 0) end
+  local nonce = os.tmpname()
+  os.remove(nonce)
+  local directory = (path:match('^(.*/)') or './') .. '.niemify-' .. assert(nonce:match('[^/]+$'))
+  assert(lfs.mkdir(directory))
+  local staged = directory .. '/output'
+  local ok, err = pcall(function()
+    local file <close> = assert(io.open(staged, 'wb'))
+    assert(file:write(data, '\n'))
+    assert(file:flush())
+  end)
+  if ok then ok, err = lfs.link(staged, path) end
+  os.remove(staged)
+  lfs.rmdir(directory)
+  if not ok then error(err, 0) end
+end
+
+local function parse(args)
+  local positional, selected, flags = {}, nil, true
+  local i = 1
+  while i <= #args do
+    local arg = args[i]
+    if flags and arg == '--' then
+      flags = false
+    elseif flags and (arg == '--help' or arg == '-h') then
+      return { 'help' }
+    elseif flags and (arg == '--version' or arg == '-v') then
+      return { 'version' }
+    elseif flags and arg == '--schema' then
+      if selected then error('--schema can only be provided once', 0) end
+      i = i + 1
+      selected = args[i]
+      if not selected or selected == '' or selected:sub(1, 1) == '-' then error('--schema requires a name', 0) end
+    elseif flags and arg ~= '-' and arg:sub(1, 1) == '-' then
+      error('Unknown option: ' .. arg, 0)
+    else
+      positional[#positional + 1] = arg
+    end
+    i = i + 1
+  end
+  return positional, selected
+end
+
+local function main(args)
+  local operands, selected = parse(args)
+  local command = table.remove(operands, 1)
+  if not command or command == 'help' then return print(help) end
+  if command == 'version' then return print(niemify.version) end
+  if not arity[command] then error('Unknown command: ' .. command .. '. See niemify help.', 0) end
+  if #operands ~= arity[command] then error('Wrong number of arguments for ' .. command .. '. See niemify help.', 0) end
+  if selected and command ~= 'convert' and command ~= 'verify' then error('--schema is only supported by convert and verify', 0) end
+  if command == 'convert' then
+    local input, output = table.unpack(operands)
+    local format = input:lower():match('%.([^.]+)$')
+    if format ~= 'xml' and format ~= 'json' then error('The input must have a .xml or .json extension', 0) end
+    local result = niemify.convert(read(input), format, { schema = selected })
+    if format == 'xml' then result = assert(json.encode(result, { indent = true })) end
+    if output == '-' then print(result) else write_new(output, result) end
+  elseif command == 'verify' then
+    niemify.validate(read(operands[1]), 'xml', { validate = true, schema = selected })
+    print('Valid')
+  else
+    print(assert(json.encode(actions[command](table.unpack(operands)), { indent = true })))
+  end
+end
+
+local ok, err = pcall(main, arg)
+if not ok then
+  io.stderr:write('niemify: ', tostring(err), '\n')
+  os.exit(1)
+end

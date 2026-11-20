@@ -1,0 +1,19 @@
+name: Lua tests
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          sudo apt-get update
+          sudo apt-get install -y lua5.4 liblua5.4-dev luarocks libexpat1-dev libxml2-utils
+      - run: |
+          luarocks --lua-version=5.4 --tree="$RUNNER_TEMP/rocks" make niemify-2.0.0-1.rockspec
+          eval "$(luarocks --lua-version=5.4 --tree="$RUNNER_TEMP/rocks" path)"
+          sh tests/run.sh
+          sample="$PWD/examples/exchange.xml"
+          cd "$RUNNER_TEMP"
+          "$RUNNER_TEMP/rocks/bin/niemify" verify "$sample"
