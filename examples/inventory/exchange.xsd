@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:common="urn:niemify:demo:inventory:common"
+           targetNamespace="urn:niemify:demo:inventory:exchange"
+           elementFormDefault="qualified">
+  <xs:import namespace="urn:niemify:demo:inventory:common" schemaLocation="common.xsd"/>
+  <xs:element name="InventoryUpdate">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Item" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element ref="common:Sku"/>
+              <xs:element name="Quantity" type="xs:nonNegativeInteger"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="warehouse" type="xs:token" use="required"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inv:InventoryUpdate xmlns:inv="urn:niemify:demo:inventory:exchange"
+                     xmlns:common="urn:niemify:demo:inventory:common"
+                     warehouse="DEMO-WH-01">
+  <inv:Item>
+    <common:Sku>box-7</common:Sku>
+    <inv:Quantity>12</inv:Quantity>
+  </inv:Item>
+</inv:InventoryUpdate>

@@ -1,6 +1,6 @@
 # niemify
 
-A Lua CLI and library for ordered XML ↔ JSON conversion and local XSD validation. Use it with NIEM exchange documents by supplying the exchange schema and its dependencies. It does not infer NIEM mappings or certify conformance.
+**Convert and validate NIEM exchange XML.** niemify is a Lua CLI and library for ordered XML ↔ JSON conversion and validation against a supplied XSD. It does not map arbitrary data into NIEM or certify conformance.
 
 ## Install
 
@@ -12,6 +12,40 @@ niemify help
 ```
 
 This is a local build from the checkout, not a publication to the LuaRocks package registry. If you use a custom LuaRocks tree, add its `bin` directory to `PATH`.
+
+## Integration demo: warehouse → inventory catalog
+
+A fictional warehouse sends two stock counts to a catalog. The [exchange schema](examples/inventory/exchange.xsd) defines the update and imports a [shared identifier schema](examples/inventory/common.xsd) from a relative path. The shared schema requires three uppercase letters, a hyphen, and four digits for each SKU.
+
+Run from the checkout with `niemify` installed:
+
+```sh
+work=$(mktemp -d)
+export NIEMIFY_HOME="$work/config"
+niemify upload inventory examples/inventory/exchange.xsd
+niemify convert examples/inventory/valid.xml "$work/inventory.json" --schema inventory
+cat "$work/inventory.json"
+niemify convert "$work/inventory.json" "$work/roundtrip.xml" --schema inventory
+niemify verify "$work/roundtrip.xml" --schema inventory
+```
+
+The JSON preserves both item elements in order, the `warehouse` attribute, and the `common:Sku` prefix. Here is the first SKU node:
+
+```json
+{
+  "type": "element",
+  "name": "common:Sku",
+  "elements": [{ "type": "text", "text": "BOX-0007" }]
+}
+```
+
+The [invalid example](examples/inventory/invalid.xml) is well-formed XML, but this command exits nonzero because `box-7` violates the imported SKU pattern:
+
+```sh
+niemify verify examples/inventory/invalid.xml --schema inventory
+```
+
+Both schemas and all records are synthetic; they are not official NIEM artifacts.
 
 ## Convert and verify
 

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="urn:niemify:demo:inventory:common"
+           elementFormDefault="qualified">
+  <xs:simpleType name="SkuType">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[A-Z]{3}-[0-9]{4}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="Sku" type="common:SkuType" xmlns:common="urn:niemify:demo:inventory:common"/>
+</xs:schema>

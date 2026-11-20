@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Added a synthetic warehouse-to-catalog exchange demonstrating relative XSD imports, ordered JSON conversion, and rejection of an invalid SKU.
+
 ## 2.0.0
 
 - Rewrote the CLI and library in Lua 5.4 and added a LuaRocks build.
