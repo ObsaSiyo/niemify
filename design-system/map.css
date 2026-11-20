@@ -1,0 +1,118 @@
+/* niemify semantic roles. Import after tokens.css and aliases.css. */
+:root {
+  color-scheme: light dark;
+  --background: light-dark(var(--ds-alias-neutral-0), var(--ds-alias-neutral-950));
+  --foreground: light-dark(var(--ds-alias-neutral-900), var(--ds-alias-neutral-50));
+  --card: light-dark(var(--ds-alias-neutral-0), var(--ds-alias-neutral-900));
+  --card-foreground: light-dark(var(--ds-alias-neutral-900), var(--ds-alias-neutral-50));
+  --popover: light-dark(var(--ds-alias-neutral-0), var(--ds-alias-neutral-900));
+  --popover-foreground: light-dark(var(--ds-alias-neutral-900), var(--ds-alias-neutral-50));
+  --primary: light-dark(var(--ds-alias-brand-700), var(--ds-alias-brand-300));
+  --primary-foreground: light-dark(var(--ds-alias-neutral-0), var(--ds-alias-neutral-950));
+  --primary-hover: light-dark(var(--ds-alias-brand-800), var(--ds-alias-brand-400));
+  --primary-active: light-dark(var(--ds-alias-brand-900), var(--ds-alias-brand-300));
+  --secondary: light-dark(var(--ds-alias-neutral-100), var(--ds-alias-neutral-800));
+  --secondary-foreground: light-dark(var(--ds-alias-neutral-900), var(--ds-alias-neutral-50));
+  --muted: light-dark(var(--ds-alias-neutral-100), var(--ds-alias-neutral-900));
+  --muted-foreground: light-dark(var(--ds-alias-neutral-600), var(--ds-alias-neutral-300));
+  --accent: light-dark(var(--ds-alias-neutral-100), var(--ds-alias-neutral-800));
+  --accent-foreground: light-dark(var(--ds-alias-neutral-900), var(--ds-alias-neutral-50));
+  --selected: light-dark(var(--ds-alias-brand-100), var(--ds-alias-brand-900));
+  --selected-foreground: light-dark(var(--ds-alias-brand-900), var(--ds-alias-brand-100));
+  --destructive: light-dark(var(--ds-alias-danger-700), var(--ds-alias-danger-400));
+  --destructive-foreground: light-dark(var(--ds-alias-neutral-0), var(--ds-alias-neutral-950));
+  --error-surface: light-dark(var(--ds-alias-danger-100), var(--ds-alias-danger-950));
+  --error-foreground: light-dark(var(--ds-alias-danger-800), var(--ds-alias-danger-300));
+  --success: light-dark(var(--ds-alias-positive-100), var(--ds-alias-positive-950));
+  --success-foreground: light-dark(var(--ds-alias-positive-800), var(--ds-alias-positive-300));
+  --warning: light-dark(var(--ds-alias-caution-100), var(--ds-alias-caution-950));
+  --warning-foreground: light-dark(var(--ds-alias-caution-800), var(--ds-alias-caution-300));
+  --info: light-dark(var(--ds-alias-brand-100), var(--ds-alias-brand-900));
+  --info-foreground: light-dark(var(--ds-alias-brand-900), var(--ds-alias-brand-100));
+  --border: light-dark(var(--ds-alias-neutral-300), var(--ds-alias-neutral-700));
+  --border-strong: light-dark(var(--ds-alias-neutral-500), var(--ds-alias-neutral-400));
+  --input: light-dark(var(--ds-alias-neutral-500), var(--ds-alias-neutral-400));
+  --ring: light-dark(var(--ds-alias-brand-700), var(--ds-alias-brand-300));
+  --sidebar: light-dark(var(--ds-alias-neutral-50), var(--ds-alias-neutral-900));
+  --sidebar-foreground: light-dark(var(--ds-alias-neutral-900), var(--ds-alias-neutral-50));
+  --sidebar-primary: light-dark(var(--ds-alias-brand-700), var(--ds-alias-brand-300));
+  --sidebar-primary-foreground: light-dark(var(--ds-alias-neutral-0), var(--ds-alias-neutral-950));
+  --sidebar-accent: light-dark(var(--ds-alias-neutral-200), var(--ds-alias-neutral-800));
+  --sidebar-accent-foreground: light-dark(var(--ds-alias-neutral-900), var(--ds-alias-neutral-50));
+  --sidebar-border: light-dark(var(--ds-alias-neutral-300), var(--ds-alias-neutral-700));
+  --sidebar-ring: light-dark(var(--ds-alias-brand-700), var(--ds-alias-brand-300));
+  --chart-1: light-dark(var(--ds-alias-brand-700), var(--ds-alias-brand-300));
+  --chart-2: light-dark(var(--ds-alias-positive-700), var(--ds-alias-positive-400));
+  --chart-3: light-dark(var(--ds-alias-caution-700), var(--ds-alias-caution-400));
+  --chart-4: light-dark(var(--ds-alias-violet-700), var(--ds-alias-violet-400));
+  --chart-5: light-dark(var(--ds-alias-cyan-700), var(--ds-alias-cyan-400));
+  --overlay: light-dark(
+    rgb(from var(--ds-alias-neutral-950) r g b / var(--ds-alias-opacity-overlay-light)),
+    rgb(from var(--ds-alias-neutral-950) r g b / var(--ds-alias-opacity-overlay-dark))
+  );
+
+  --radius: var(--ds-alias-radius-lg);
+  --radius-sm: var(--ds-alias-radius-sm);
+  --radius-md: var(--ds-alias-radius-md);
+  --radius-lg: var(--ds-alias-radius-lg);
+  --radius-xl: var(--ds-alias-radius-xl);
+  --radius-2xl: var(--ds-alias-radius-2xl);
+  --radius-full: var(--ds-alias-radius-full);
+  --font-body: var(--ds-alias-font-sans);
+  --font-code: var(--ds-alias-font-mono);
+  --body-size: var(--ds-alias-size-base);
+  --body-leading: var(--ds-alias-leading-normal);
+  --label-size: var(--ds-alias-size-sm);
+  --label-weight: var(--ds-alias-weight-medium);
+  --heading-size: var(--ds-alias-size-3xl);
+  --heading-weight: var(--ds-alias-weight-bold);
+  --heading-tracking: var(--ds-alias-tracking-tight);
+  --heading-leading: var(--ds-alias-leading-tight);
+  --focus-width: var(--ds-alias-stroke-strong);
+  --focus-offset: var(--ds-alias-space-1);
+  --control-min-height: var(--ds-alias-space-10);
+  --touch-target: var(--ds-alias-space-11);
+  --icon-size: var(--ds-alias-space-4);
+  --page-gutter: var(--ds-alias-space-6);
+  --stack-gap: var(--ds-alias-space-4);
+  --content-width: var(--ds-alias-container-xl);
+  --card-elevation: var(--ds-alias-shadow-sm);
+  --overlay-elevation: var(--ds-alias-shadow-lg);
+  --disabled-opacity: var(--ds-alias-opacity-disabled);
+  --motion-fast: var(--ds-alias-duration-fast);
+  --motion-normal: var(--ds-alias-duration-normal);
+  --motion-ease: var(--ds-alias-ease-standard);
+  --z-sticky: var(--ds-alias-layer-sticky);
+  --z-menu: var(--ds-alias-layer-dropdown);
+  --z-scrim: var(--ds-alias-layer-overlay);
+  --z-dialog: var(--ds-alias-layer-modal);
+  --z-toast: var(--ds-alias-layer-toast);
+  --z-tooltip: var(--ds-alias-layer-tooltip);
+
+  --terminal-command: light-dark(var(--ds-alias-neutral-900), var(--ds-alias-neutral-50));
+  --terminal-output: light-dark(var(--ds-alias-neutral-600), var(--ds-alias-neutral-300));
+  --terminal-success: light-dark(var(--ds-alias-brand-700), var(--ds-alias-brand-300));
+  --terminal-error: light-dark(var(--ds-alias-caution-800), var(--ds-alias-caution-300));
+  --terminal-panel: light-dark(var(--ds-alias-neutral-50), var(--ds-alias-neutral-900));
+  --terminal-border: light-dark(var(--ds-alias-neutral-300), var(--ds-alias-neutral-700));
+  --terminal-left-gutter: var(--ds-alias-terminal-left-gutter);
+  --terminal-panel-gap: var(--ds-alias-terminal-panel-gap);
+  --terminal-copy: var(--ds-alias-terminal-copy);
+  --terminal-title: var(--ds-alias-terminal-title);
+}
+
+[data-theme="light"], .light:not([data-theme]) { color-scheme: light; }
+[data-theme="dark"], .dark:not([data-theme]) { color-scheme: dark; }
+
+[data-density="compact"] {
+  --control-min-height: var(--ds-alias-space-8);
+  --page-gutter: var(--ds-alias-space-4);
+  --stack-gap: var(--ds-alias-space-3);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-fast: var(--ds-alias-duration-none);
+    --motion-normal: var(--ds-alias-duration-none);
+  }
+}

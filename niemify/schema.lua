@@ -174,10 +174,12 @@ function M.update(name, path) return register(name, path, true) end
 local function shell_quote(value)
   return "'" .. tostring(value):gsub("'", "'\\''") .. "'"
 end
-function M.validate(xml, schema)
+function M.validate(xml, schema, allow_path, sample_path)
   if type(xml) ~= "string" then error("XML input must be a string", 2) end
   if xml:match("<!DOCTYPE[%s>]") then error("XML validation does not process DTD declarations", 2) end
-  local filename = schema_path(schema)
+  local is_path = allow_path and schema ~= nil and
+    (schema:find("/", 1, true) or schema:lower():match("%.xsd$"))
+  local filename = is_path and ensure_source(schema) or schema_path(schema)
   local schema_file = assert(io.open(filename, "r")); local schema_source = schema_file:read("*a"); schema_file:close()
   if schema_source:match("<!DOCTYPE[%s>]") then error("Schema validation does not process DTD declarations", 2) end
   local input, errors = os.tmpname(), os.tmpname()
@@ -195,8 +197,19 @@ function M.validate(xml, schema)
   os.remove(input); os.remove(errors)
   if not ran then error(ok, 2) end
   if code == 127 then error("XML validation requires the xmllint executable", 2) end
-  if not ok or code ~= 0 then error("XML does not conform to schema \"" .. (schema or "active") .. "\"" .. (details ~= "" and (": " .. details:gsub("%s+$", "")) or ""), 2) end
-  return true
+  if not ok or code ~= 0 then
+    if sample_path then
+      details = details:gsub(input:gsub("(%W)", "%%%1"), function() return sample_path end)
+    end
+    details = details:gsub("%s+$", "")
+    if sample_path and code == 3 then return false, details end
+    if code == 5 then -- xmllint could not compile the schema, including its dependencies.
+      if sample_path then return nil, details, filename end
+      error("Unable to compile XSD \"" .. filename .. "\"" .. (details ~= "" and (": " .. details) or ""), 2)
+    end
+    error("XML does not conform to schema \"" .. (schema or "active") .. "\"" .. (details ~= "" and (": " .. details) or ""), 2)
+  end
+  return true, filename
 end
 
 M.schemaPath = schema_path

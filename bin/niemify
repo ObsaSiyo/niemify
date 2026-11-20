@@ -9,6 +9,11 @@ local help = [[niemify — Convert XML and JSON. Validate against XSD.
 
 Usage: niemify <command> [options]
 
+Examples (run the first two from the checkout)
+  niemify verify examples/inventory/valid.xml --schema examples/inventory/exchange.xsd
+  niemify convert examples/inventory/valid.xml -
+  niemify list
+
 Convert and validate
   convert   Convert XML to JSON, or JSON to XML
   verify    Validate XML against an XSD
@@ -25,37 +30,97 @@ Options
   -h, --help      Show help
   -v, --version   Print the version
 
-Run niemify help <command> for usage and examples.]]
+Run niemify help <command> or niemify <command> --help for usage and examples.]]
 
 local commands = {
   convert = { 2, '<input.xml|input.json> <output|-> [--schema <name>]',
-    'The input extension determines the output format. Use - for stdout.\nExisting output files are never overwritten.',
-    'niemify convert exchange.xml exchange.json --schema exchange-demo' },
-  verify = { 1, '<input.xml> [--schema <name>]',
-    'Uses the active schema unless --schema is supplied.',
-    'niemify verify exchange.xml --schema exchange-demo' },
-  list = { 0, '', 'Print built-in and registered schema names as JSON.', 'niemify list' },
+    'The input extension determines the output format. Use - for data-only stdout.\n'
+      .. 'XSD validation is opt-in: use --schema with a built-in or registered schema name.\n'
+      .. 'Existing output files are never overwritten.',
+    'From the checkout’s examples directory:\n'
+      .. '  niemify convert exchange.xml exchange.json --schema exchange-demo\n'
+      .. '  niemify convert exchange.json - --schema exchange-demo' },
+  verify = { 1, '<input.xml> [--schema <name|path>] [--niem 6.0 --rules <file> [--catalog <file>]]',
+    'Pass an XML file and optionally a saved schema name or local XSD path. If --schema is omitted,\n'
+      .. 'verify uses the active schema (exchange-demo on a fresh configuration).\n'
+      .. 'By default, verify checks XML syntax and XSD validity only. No Java needed.\n'
+      .. 'Opt in with --niem 6.0 and --rules <file> (pinned Schematron rules).\n'
+      .. 'Use --catalog <file> if the rules need to resolve local dependencies.\n'
+      .. 'NIEM checks only the ExtensionSchemaDocument target and requires SCHEval with Java 25\n'
+      .. 'on network-denied Linux. Manual review is required. Omit all three NIEM flags to retry XSD only.',
+    'XSD only (from the checkout):\n'
+      .. '  niemify verify examples/inventory/valid.xml --schema examples/inventory/exchange.xsd\n\n'
+      .. 'Opt in to NIEM checks (from the staged fixture directory):\n'
+      .. '  niemify verify sample.xml --schema extension.xsd --niem 6.0 \\\n'
+      .. '    --rules rules/sch/extTarget-6.0.sch --catalog model/xsd/xml-catalog.xml' },
+  list = { 0, '', 'List built-in and registered schema names as JSON without changing the configuration.', '  niemify list' },
   upload = { 2, '<name> <schema.xsd>',
-    'Register a trusted local XSD in place so relative imports still work.',
-    'niemify upload inventory examples/inventory/exchange.xsd' },
+    'Save a new name for a trusted local XSD path without copying it. Relative imports still work.\n'
+      .. 'The active schema name does not change.',
+    '  niemify upload inventory examples/inventory/exchange.xsd' },
   update = { 2, '<name> <schema.xsd>',
-    'Point an existing registration at a different local XSD.',
-    'niemify update inventory ./schemas/new-exchange.xsd' },
-  switch = { 1, '<name>', 'Set the schema used by verify when no --schema is supplied.', 'niemify switch exchange-demo' },
-  config = { 0, '', 'Print the active schema and local registrations as JSON.', 'niemify config' },
-  setup = { 0, '', 'Initialize local configuration without removing existing registrations.', 'niemify setup' },
+    'Replace an existing registration with a reference to a trusted local XSD without copying it.\n'
+      .. 'The active schema name does not change; if it names this registration, verify uses the new path.',
+    '  niemify update inventory ./schemas/new-exchange.xsd' },
+  switch = { 1, '<name>',
+    'Set a built-in or registered schema as the default for later verify runs without --schema.',
+    '  niemify switch exchange-demo' },
+  config = { 0, '', 'Print the active schema and local registrations as JSON.', '  niemify config' },
+  setup = { 0, '', 'Initialize local configuration without removing existing registrations.', '  niemify setup' },
 }
+
+local function one_edit(a, b)
+  if math.abs(#a - #b) > 1 then return false end
+  if #a > #b then a, b = b, a end
+  local i = 1
+  while i <= #a and a:byte(i) == b:byte(i) do i = i + 1 end
+  if #a < #b then return a:sub(i) == b:sub(i + 1) end
+  if i > #a then return false end
+  return a:sub(i + 1) == b:sub(i + 1)
+    or (a:byte(i) == b:byte(i + 1) and a:byte(i + 1) == b:byte(i)
+      and a:sub(i + 2) == b:sub(i + 2))
+end
+
+local function unknown_command(command)
+  local message = 'Unknown command: ' .. command .. '.'
+  local fallback = message .. ' Run niemify --help.'
+  local suggestion
+  -- These two commands are dispatched before the operand table.
+  if one_edit(command, 'help') then suggestion = 'help' end
+  if one_edit(command, 'version') then
+    if suggestion then error(fallback, 0) end
+    suggestion = 'version'
+  end
+  for name in pairs(commands) do
+    if one_edit(command, name) then
+      if suggestion then error(fallback, 0) end
+      suggestion = name
+    end
+  end
+  if not suggestion then error(fallback, 0) end
+  error(message .. ' Did you mean "' .. suggestion .. '"?', 0)
+end
 
 local function usage(command)
   local operands = commands[command][2]
   return 'Usage: niemify ' .. command .. (operands == '' and '' or ' ' .. operands)
 end
 
+local function usage_error(message, command)
+  local guidance = 'Run niemify --help for usage.'
+  if commands[command] then
+    guidance = usage(command)
+  elseif command == 'help' then
+    guidance = 'Usage: niemify help [command]'
+  end
+  error(message .. '\n' .. guidance, 0)
+end
+
 local function show_help(command)
   if not command or command == 'help' then return print(help) end
   local entry = commands[command]
-  if not entry then error('Unknown command: ' .. command .. '. Run niemify --help.', 0) end
-  print(usage(command) .. '\n\n' .. entry[3] .. '\n\nExample:\n  ' .. entry[4])
+  if not entry then unknown_command(command) end
+  print(usage(command) .. '\n\n' .. entry[3] .. '\n\nExamples:\n' .. entry[4])
 end
 
 local actions = {
@@ -64,7 +129,8 @@ local actions = {
 }
 
 local function read(path)
-  local file <close> = assert(io.open(path, 'rb'))
+  local file <close>, err = io.open(path, 'rb')
+  if not file then error(err .. '\nHint: check the input path and read permissions.', 0) end
   return assert(file:read('a'))
 end
 
@@ -95,7 +161,7 @@ local function write_new(path, data)
 end
 
 local function parse(args)
-  local positional, selected, show_help_flag, version_flag, flags = {}, nil, false, false, true
+  local positional, options, show_help_flag, version_flag, flags = {}, {}, false, false, true
   local i = 1
   while i <= #args do
     local arg = args[i]
@@ -105,43 +171,56 @@ local function parse(args)
       show_help_flag = true
     elseif flags and (arg == '--version' or arg == '-v') then
       version_flag = true
-    elseif flags and arg == '--schema' then
-      if selected then error('--schema can only be provided once', 0) end
+    elseif flags and (arg == '--schema' or arg == '--niem' or arg == '--rules' or arg == '--catalog') then
+      local key = arg:sub(3)
+      if options[key] then usage_error(arg .. ' can only be provided once', positional[1]) end
       i = i + 1
-      selected = args[i]
-      if not selected or selected == '' or selected:sub(1, 1) == '-' then error('--schema requires a name', 0) end
+      local value = args[i]
+      if not value or value == '' or value:sub(1, 1) == '-' then
+        usage_error(arg .. ' requires a value', positional[1])
+      end
+      options[key] = value
     elseif flags and arg ~= '-' and arg:sub(1, 1) == '-' then
-      error('Unknown option: ' .. arg, 0)
+      usage_error('Unknown option: ' .. arg, positional[1])
     else
       positional[#positional + 1] = arg
     end
     i = i + 1
   end
-  return positional, selected, show_help_flag, version_flag
+  return positional, options, show_help_flag, version_flag
 end
 
 local function main(args)
-  local operands, selected, help_flag, version_flag = parse(args)
+  local operands, options, help_flag, version_flag = parse(args)
+  local selected = options.schema
   local command = table.remove(operands, 1)
   if version_flag or command == 'version' then return print(niemify.version) end
   if command == 'help' then
-    if #operands > 1 then error('Usage: niemify help [command]', 0) end
+    if #operands > 1 then usage_error('help expects at most one command', command) end
     return show_help(operands[1])
   end
   if help_flag or not command then return show_help(command) end
   local spec = commands[command]
-  if not spec then error('Unknown command: ' .. command .. '. Run niemify --help.', 0) end
+  if not spec then unknown_command(command) end
+  if options.niem or options.rules or options.catalog then
+    if command ~= 'verify' then usage_error('--niem, --rules and --catalog are only valid for verify', command) end
+    if not options.niem then usage_error('--rules and --catalog require --niem 6.0', command) end
+    if options.niem ~= '6.0' then
+      usage_error('Unsupported NIEM version: ' .. options.niem .. '; expected 6.0', command)
+    end
+    if not options.rules then usage_error('--niem 6.0 requires --rules <file>', command) end
+  end
   if #operands ~= spec[1] then
-    error(('%s expects %d argument%s.\n%s'):format(command, spec[1], spec[1] == 1 and '' or 's', usage(command)), 0)
+    usage_error(('%s expects %d argument%s.'):format(command, spec[1], spec[1] == 1 and '' or 's'), command)
   end
   if selected and command ~= 'convert' and command ~= 'verify' then
-    error('--schema is only supported by convert and verify.\n' .. usage(command), 0)
+    usage_error('--schema is only supported by convert and verify.', command)
   end
   if command == 'convert' then
     local input, output = table.unpack(operands)
     local format = input:lower():match('%.([^.]+)$')
     if format ~= 'xml' and format ~= 'json' then
-      error('The input must have a .xml or .json extension.\n' .. usage(command), 0)
+      usage_error('The input must have a .xml or .json extension.', command)
     end
     local result = niemify.convert(read(input), format, { schema = selected })
     if format == 'xml' then result = assert(json.encode(result, { indent = true })) end
@@ -152,8 +231,43 @@ local function main(args)
       io.stderr:write('Wrote ', output, format == 'xml' and ' (XML to JSON).\n' or ' (JSON to XML).\n')
     end
   elseif command == 'verify' then
-    niemify.validate(read(operands[1]), 'xml', { validate = true, schema = selected })
-    print('Valid')
+    local path = operands[1]
+    local xml = read(path)
+    local parsed, parse_error = pcall(niemify.validate, xml, 'xml')
+    if not parsed then
+      io.stderr:write('XML syntax: Failed\nXSD validation: Skipped\nNIEM NDR: Not checked\n',
+        path, ': ', parse_error, '\n')
+      os.exit(1)
+    end
+    local ran, valid, result, entry = pcall(schema.validate, xml, selected, true, path)
+    if not ran or not valid then
+      local status = 'Unable to validate'
+      if ran and valid == false then status = 'Failed' end
+      if entry then status = status .. ' (' .. entry .. ')' end
+      io.stderr:write('XML syntax: Well-formed\nXSD validation: ', status,
+        '\nNIEM NDR: Not checked\n', ran and result or valid, '\n')
+      os.exit(1)
+    end
+    local xsd = 'XML syntax: Well-formed\nXSD validation: Passed (' .. result .. ')\n'
+    if not options.niem then
+      io.stdout:write(xsd, 'NIEM NDR: Not checked\n')
+    else
+      local ndr = require('niemify.ndr')
+      local status, findings = ndr.run(result, options.rules, options.catalog)
+      local stream = status == 'passed' and io.stdout or io.stderr
+      stream:write(xsd, 'NIEM NDR: ', status == 'passed' and 'Passed' or status == 'failed' and 'Failed' or 'Unable to run',
+        '\nProfile: NIEM 6.0 extension schema document\nTarget: ', ndr.target_id,
+        '\nRules: ', options.rules, ' (expected revision ', ndr.rules_revision, ')\n')
+      if not status then
+        stream:write(findings, '\nHint: retry XSD-only verification by omitting --niem, --rules and --catalog.\n')
+      else
+        for _, finding in ipairs(findings) do
+          stream:write(finding.severity, ': ', finding.message, '\n')
+        end
+        stream:write('Manual review still required\n')
+      end
+      if status ~= 'passed' then os.exit(1) end
+    end
   else
     print(assert(json.encode(actions[command](table.unpack(operands)), { indent = true })))
   end

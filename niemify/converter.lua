@@ -255,13 +255,11 @@ local function parse_pass(source, namespace_separator, collect)
 
   local parser = lxp.new(callbacks, namespace_separator)
   local ok, result, err = pcall(function()
-    local parsed, parse_error = parser:parse(source)
+    local parsed, parse_error, line, column = parser:parse(source)
+    if parsed then parsed, parse_error, line, column = parser:parse() end
     if not parsed then
-      error(parse_error or "parser rejected input", 0)
-    end
-    local finished, finish_error = parser:parse()
-    if not finished then
-      error(finish_error or "parser rejected input", 0)
+      local location = line and ("line %d, column %d: "):format(line, column) or ""
+      error(location .. (parse_error or "parser rejected input"), 0)
     end
     local closed, close_error = parser:close()
     if not closed then

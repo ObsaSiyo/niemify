@@ -75,3 +75,7 @@ if cli verify "$demo/invalid.xml" --schema inventory >"$work/out" 2>"$work/err";
 fi
 grep -q 'box-7' "$work/err"
 echo 'Integration demo: imported XSD, ordered JSON, and invalid SKU rejection passed'
+
+for case in direct-path basic-result invalid-message missing-import; do
+  LUA="$lua" sh tests/verify.sh "$case"
+done

@@ -1,0 +1,165 @@
+/* Stable palette and scale vocabulary; independent of theme and components. */
+:root {
+  --ds-alias-neutral-0: var(--ds-token-neutral-0);
+  --ds-alias-neutral-50: var(--ds-token-neutral-50);
+  --ds-alias-neutral-100: var(--ds-token-neutral-100);
+  --ds-alias-neutral-200: var(--ds-token-neutral-200);
+  --ds-alias-neutral-300: var(--ds-token-neutral-300);
+  --ds-alias-neutral-400: var(--ds-token-neutral-400);
+  --ds-alias-neutral-500: var(--ds-token-neutral-500);
+  --ds-alias-neutral-600: var(--ds-token-neutral-600);
+  --ds-alias-neutral-700: var(--ds-token-neutral-700);
+  --ds-alias-neutral-800: var(--ds-token-neutral-800);
+  --ds-alias-neutral-900: var(--ds-token-neutral-900);
+  --ds-alias-neutral-950: var(--ds-token-neutral-950);
+
+  --ds-alias-brand-50: var(--ds-token-teal-50);
+  --ds-alias-brand-100: var(--ds-token-teal-100);
+  --ds-alias-brand-300: var(--ds-token-teal-300);
+  --ds-alias-brand-400: var(--ds-token-teal-400);
+  --ds-alias-brand-600: var(--ds-token-teal-600);
+  --ds-alias-brand-700: var(--ds-token-teal-700);
+  --ds-alias-brand-800: var(--ds-token-teal-800);
+  --ds-alias-brand-900: var(--ds-token-teal-900);
+
+  --ds-alias-danger-100: var(--ds-token-red-100);
+  --ds-alias-danger-300: var(--ds-token-red-300);
+  --ds-alias-danger-400: var(--ds-token-red-400);
+  --ds-alias-danger-700: var(--ds-token-red-700);
+  --ds-alias-danger-800: var(--ds-token-red-800);
+  --ds-alias-danger-950: var(--ds-token-red-950);
+
+  --ds-alias-positive-100: var(--ds-token-green-100);
+  --ds-alias-positive-300: var(--ds-token-green-300);
+  --ds-alias-positive-400: var(--ds-token-green-400);
+  --ds-alias-positive-700: var(--ds-token-green-700);
+  --ds-alias-positive-800: var(--ds-token-green-800);
+  --ds-alias-positive-950: var(--ds-token-green-950);
+
+  --ds-alias-caution-100: var(--ds-token-amber-100);
+  --ds-alias-caution-300: var(--ds-token-amber-300);
+  --ds-alias-caution-400: var(--ds-token-amber-400);
+  --ds-alias-caution-700: var(--ds-token-amber-700);
+  --ds-alias-caution-800: var(--ds-token-amber-800);
+  --ds-alias-caution-950: var(--ds-token-amber-950);
+
+  --ds-alias-violet-400: var(--ds-token-violet-400);
+  --ds-alias-violet-700: var(--ds-token-violet-700);
+
+  --ds-alias-cyan-400: var(--ds-token-cyan-400);
+  --ds-alias-cyan-700: var(--ds-token-cyan-700);
+
+  --ds-alias-font-sans: var(--ds-token-font-sans);
+  --ds-alias-font-serif: var(--ds-token-font-serif);
+  --ds-alias-font-mono: var(--ds-token-font-mono);
+
+  --ds-alias-size-xs: var(--ds-token-size-xs);
+  --ds-alias-size-sm: var(--ds-token-size-sm);
+  --ds-alias-size-base: var(--ds-token-size-base);
+  --ds-alias-size-lg: var(--ds-token-size-lg);
+  --ds-alias-size-xl: var(--ds-token-size-xl);
+  --ds-alias-size-2xl: var(--ds-token-size-2xl);
+  --ds-alias-size-3xl: var(--ds-token-size-3xl);
+  --ds-alias-size-4xl: var(--ds-token-size-4xl);
+  --ds-alias-size-5xl: var(--ds-token-size-5xl);
+  --ds-alias-size-6xl: var(--ds-token-size-6xl);
+
+  --ds-alias-leading-tight: var(--ds-token-leading-tight);
+  --ds-alias-leading-normal: var(--ds-token-leading-normal);
+  --ds-alias-leading-relaxed: var(--ds-token-leading-relaxed);
+
+  --ds-alias-weight-normal: var(--ds-token-weight-normal);
+  --ds-alias-weight-medium: var(--ds-token-weight-medium);
+  --ds-alias-weight-semibold: var(--ds-token-weight-semibold);
+  --ds-alias-weight-bold: var(--ds-token-weight-bold);
+
+  --ds-alias-tracking-tight: var(--ds-token-tracking-tight);
+  --ds-alias-tracking-normal: var(--ds-token-tracking-normal);
+  --ds-alias-tracking-wide: var(--ds-token-tracking-wide);
+
+  --ds-alias-space-0: var(--ds-token-space-0);
+  --ds-alias-space-1: var(--ds-token-space-1);
+  --ds-alias-space-2: var(--ds-token-space-2);
+  --ds-alias-space-3: var(--ds-token-space-3);
+  --ds-alias-space-4: var(--ds-token-space-4);
+  --ds-alias-space-5: var(--ds-token-space-5);
+  --ds-alias-space-6: var(--ds-token-space-6);
+  --ds-alias-space-8: var(--ds-token-space-8);
+  --ds-alias-space-10: var(--ds-token-space-10);
+  --ds-alias-space-11: var(--ds-token-space-11);
+  --ds-alias-space-12: var(--ds-token-space-12);
+  --ds-alias-space-16: var(--ds-token-space-16);
+  --ds-alias-space-20: var(--ds-token-space-20);
+  --ds-alias-space-24: var(--ds-token-space-24);
+  --ds-alias-space-32: var(--ds-token-space-32);
+
+  --ds-alias-breakpoint-sm: var(--ds-token-breakpoint-sm);
+  --ds-alias-breakpoint-md: var(--ds-token-breakpoint-md);
+  --ds-alias-breakpoint-lg: var(--ds-token-breakpoint-lg);
+  --ds-alias-breakpoint-xl: var(--ds-token-breakpoint-xl);
+  --ds-alias-breakpoint-2xl: var(--ds-token-breakpoint-2xl);
+
+  --ds-alias-container-sm: var(--ds-token-container-sm);
+  --ds-alias-container-md: var(--ds-token-container-md);
+  --ds-alias-container-lg: var(--ds-token-container-lg);
+  --ds-alias-container-xl: var(--ds-token-container-xl);
+  --ds-alias-container-2xl: var(--ds-token-container-2xl);
+
+  --ds-alias-radius-none: var(--ds-token-radius-none);
+  --ds-alias-radius-sm: var(--ds-token-radius-sm);
+  --ds-alias-radius-md: var(--ds-token-radius-md);
+  --ds-alias-radius-lg: var(--ds-token-radius-lg);
+  --ds-alias-radius-xl: var(--ds-token-radius-xl);
+  --ds-alias-radius-2xl: var(--ds-token-radius-2xl);
+  --ds-alias-radius-full: var(--ds-token-radius-full);
+
+  --ds-alias-stroke-thin: var(--ds-token-stroke-thin);
+  --ds-alias-stroke-strong: var(--ds-token-stroke-strong);
+
+  --ds-alias-shadow-none: var(--ds-token-shadow-none);
+  --ds-alias-shadow-xs: var(--ds-token-shadow-xs);
+  --ds-alias-shadow-sm: var(--ds-token-shadow-sm);
+  --ds-alias-shadow-md: var(--ds-token-shadow-md);
+  --ds-alias-shadow-lg: var(--ds-token-shadow-lg);
+  --ds-alias-shadow-inset: var(--ds-token-shadow-inset);
+
+  --ds-alias-effect-drop-shadow: var(--ds-token-effect-drop-shadow);
+  --ds-alias-effect-blur: var(--ds-token-effect-blur);
+  --ds-alias-effect-perspective: var(--ds-token-effect-perspective);
+  --ds-alias-effect-zoom: var(--ds-token-effect-zoom);
+
+  --ds-alias-opacity-disabled: var(--ds-token-opacity-disabled);
+  --ds-alias-opacity-overlay-light: var(--ds-token-opacity-overlay-light);
+  --ds-alias-opacity-overlay-dark: var(--ds-token-opacity-overlay-dark);
+
+  --ds-alias-aspect-square: var(--ds-token-aspect-square);
+  --ds-alias-aspect-photo: var(--ds-token-aspect-photo);
+  --ds-alias-aspect-video: var(--ds-token-aspect-video);
+
+  --ds-alias-duration-none: var(--ds-token-duration-none);
+  --ds-alias-duration-fast: var(--ds-token-duration-fast);
+  --ds-alias-duration-normal: var(--ds-token-duration-normal);
+  --ds-alias-duration-slow: var(--ds-token-duration-slow);
+
+  --ds-alias-ease-standard: var(--ds-token-ease-standard);
+  --ds-alias-ease-enter: var(--ds-token-ease-enter);
+  --ds-alias-ease-exit: var(--ds-token-ease-exit);
+
+  --ds-alias-layer-base: var(--ds-token-layer-base);
+  --ds-alias-layer-sticky: var(--ds-token-layer-sticky);
+  --ds-alias-layer-dropdown: var(--ds-token-layer-dropdown);
+  --ds-alias-layer-overlay: var(--ds-token-layer-overlay);
+  --ds-alias-layer-modal: var(--ds-token-layer-modal);
+  --ds-alias-layer-toast: var(--ds-token-layer-toast);
+  --ds-alias-layer-tooltip: var(--ds-token-layer-tooltip);
+
+  --ds-alias-layout-grid-narrow: var(--ds-token-layout-grid-narrow);
+  --ds-alias-layout-grid-mid: var(--ds-token-layout-grid-mid);
+  --ds-alias-layout-grid-wide: var(--ds-token-layout-grid-wide);
+  --ds-alias-layout-tab-size: var(--ds-token-layout-tab-size);
+
+  --ds-alias-terminal-left-gutter: var(--ds-token-terminal-left-gutter);
+  --ds-alias-terminal-panel-gap: var(--ds-token-terminal-panel-gap);
+  --ds-alias-terminal-copy: var(--ds-token-terminal-copy);
+  --ds-alias-terminal-title: var(--ds-token-terminal-title);
+}

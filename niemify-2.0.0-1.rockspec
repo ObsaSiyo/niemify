@@ -22,6 +22,7 @@ build = {
     niemify = 'niemify/init.lua',
     ['niemify.converter'] = 'niemify/converter.lua',
     ['niemify.schema'] = 'niemify/schema.lua',
+    ['niemify.ndr'] = 'niemify/ndr.lua',
   },
   install = {
     lua = { ['niemify.exchange-demo'] = 'niemify/exchange-demo.xsd' },

@@ -1,0 +1,165 @@
+/* niemify foundations. The CLI mockup provides the dark ink, panel, teal, and amber anchors. */
+:root {
+  --ds-token-neutral-0: #ffffff;
+  --ds-token-neutral-50: #f2f5f9;
+  --ds-token-neutral-100: #f1f5f9;
+  --ds-token-neutral-200: #dae4ef;
+  --ds-token-neutral-300: #c5d0dc;
+  --ds-token-neutral-400: #9cacc0;
+  --ds-token-neutral-500: #64768b;
+  --ds-token-neutral-600: #4c5d72;
+  --ds-token-neutral-700: #394b61;
+  --ds-token-neutral-800: #203044;
+  --ds-token-neutral-900: #172231;
+  --ds-token-neutral-950: #101722;
+
+  --ds-token-teal-50: #edfcf8;
+  --ds-token-teal-100: #d2f6eb;
+  --ds-token-teal-300: #80e8d0;
+  --ds-token-teal-400: #4addbc;
+  --ds-token-teal-600: #167c69;
+  --ds-token-teal-700: #116653;
+  --ds-token-teal-800: #0d5244;
+  --ds-token-teal-900: #103e35;
+
+  --ds-token-red-100: #fee2e2;
+  --ds-token-red-300: #fca5a5;
+  --ds-token-red-400: #f87171;
+  --ds-token-red-700: #b91c1c;
+  --ds-token-red-800: #991b1b;
+  --ds-token-red-950: #450a0a;
+
+  --ds-token-green-100: #dcfce7;
+  --ds-token-green-300: #86efac;
+  --ds-token-green-400: #4ade80;
+  --ds-token-green-700: #15803d;
+  --ds-token-green-800: #166534;
+  --ds-token-green-950: #052e16;
+
+  --ds-token-amber-100: #fff0de;
+  --ds-token-amber-300: #ffbb87;
+  --ds-token-amber-400: #ffa969;
+  --ds-token-amber-700: #99460f;
+  --ds-token-amber-800: #783507;
+  --ds-token-amber-950: #3d2419;
+
+  --ds-token-violet-400: #a78bfa;
+  --ds-token-violet-700: #6d28d9;
+
+  --ds-token-cyan-400: #22d3ee;
+  --ds-token-cyan-700: #0e7490;
+
+  --ds-token-font-sans: Inter, system-ui, sans-serif;
+  --ds-token-font-serif: ui-serif, Georgia, serif;
+  --ds-token-font-mono: ui-monospace, monospace;
+
+  --ds-token-size-xs: .75rem;
+  --ds-token-size-sm: .875rem;
+  --ds-token-size-base: 1rem;
+  --ds-token-size-lg: 1.125rem;
+  --ds-token-size-xl: 1.25rem;
+  --ds-token-size-2xl: 1.5rem;
+  --ds-token-size-3xl: 1.875rem;
+  --ds-token-size-4xl: 2.25rem;
+  --ds-token-size-5xl: 3rem;
+  --ds-token-size-6xl: 3.75rem;
+
+  --ds-token-leading-tight: 1.2;
+  --ds-token-leading-normal: 1.5;
+  --ds-token-leading-relaxed: 1.7;
+
+  --ds-token-weight-normal: 400;
+  --ds-token-weight-medium: 500;
+  --ds-token-weight-semibold: 600;
+  --ds-token-weight-bold: 700;
+
+  --ds-token-tracking-tight: -.025em;
+  --ds-token-tracking-normal: 0;
+  --ds-token-tracking-wide: .025em;
+
+  --ds-token-space-0: 0rem;
+  --ds-token-space-1: 0.25rem;
+  --ds-token-space-2: 0.5rem;
+  --ds-token-space-3: 0.75rem;
+  --ds-token-space-4: 1rem;
+  --ds-token-space-5: 1.25rem;
+  --ds-token-space-6: 1.5rem;
+  --ds-token-space-8: 2rem;
+  --ds-token-space-10: 2.5rem;
+  --ds-token-space-11: 2.75rem;
+  --ds-token-space-12: 3rem;
+  --ds-token-space-16: 4rem;
+  --ds-token-space-20: 5rem;
+  --ds-token-space-24: 6rem;
+  --ds-token-space-32: 8rem;
+
+  --ds-token-breakpoint-sm: 40rem;
+  --ds-token-breakpoint-md: 48rem;
+  --ds-token-breakpoint-lg: 64rem;
+  --ds-token-breakpoint-xl: 80rem;
+  --ds-token-breakpoint-2xl: 96rem;
+
+  --ds-token-container-sm: 24rem;
+  --ds-token-container-md: 36rem;
+  --ds-token-container-lg: 48rem;
+  --ds-token-container-xl: 64rem;
+  --ds-token-container-2xl: 80rem;
+
+  --ds-token-radius-none: 0;
+  --ds-token-radius-sm: .25rem;
+  --ds-token-radius-md: .375rem;
+  --ds-token-radius-lg: .5rem;
+  --ds-token-radius-xl: .75rem;
+  --ds-token-radius-2xl: 1rem;
+  --ds-token-radius-full: 9999px;
+
+  --ds-token-stroke-thin: 1px;
+  --ds-token-stroke-strong: 2px;
+
+  --ds-token-shadow-none: none;
+  --ds-token-shadow-xs: 0 1px 2px rgb(2 6 23 / 0.10);
+  --ds-token-shadow-sm: 0 2px 5px rgb(2 6 23 / 0.14);
+  --ds-token-shadow-md: 0 6px 16px rgb(2 6 23 / 0.18);
+  --ds-token-shadow-lg: 0 12px 32px rgb(2 6 23 / 0.22);
+  --ds-token-shadow-inset: inset 0 1px 2px rgb(2 6 23 / 0.12);
+
+  --ds-token-effect-drop-shadow: 0 4px 6px rgb(2 6 23 / 0.16);
+  --ds-token-effect-blur: 8px;
+  --ds-token-effect-perspective: 600px;
+  --ds-token-effect-zoom: 1;
+
+  --ds-token-opacity-disabled: .55;
+  --ds-token-opacity-overlay-light: .48;
+  --ds-token-opacity-overlay-dark: .72;
+
+  --ds-token-aspect-square: 1 / 1;
+  --ds-token-aspect-photo: 4 / 3;
+  --ds-token-aspect-video: 16 / 9;
+
+  --ds-token-duration-none: 0ms;
+  --ds-token-duration-fast: 120ms;
+  --ds-token-duration-normal: 180ms;
+  --ds-token-duration-slow: 280ms;
+
+  --ds-token-ease-standard: cubic-bezier(.2, 0, 0, 1);
+  --ds-token-ease-enter: cubic-bezier(0, 0, .2, 1);
+  --ds-token-ease-exit: cubic-bezier(.4, 0, 1, 1);
+
+  --ds-token-layer-base: 0;
+  --ds-token-layer-sticky: 10;
+  --ds-token-layer-dropdown: 20;
+  --ds-token-layer-overlay: 30;
+  --ds-token-layer-modal: 40;
+  --ds-token-layer-toast: 50;
+  --ds-token-layer-tooltip: 60;
+
+  --ds-token-layout-grid-narrow: 4;
+  --ds-token-layout-grid-mid: 8;
+  --ds-token-layout-grid-wide: 12;
+  --ds-token-layout-tab-size: 4;
+
+  --ds-token-terminal-left-gutter: 1.75rem;
+  --ds-token-terminal-panel-gap: 1.25rem;
+  --ds-token-terminal-copy: .8125rem;
+  --ds-token-terminal-title: 1.625rem;
+}
